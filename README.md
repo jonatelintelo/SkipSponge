@@ -1,4 +1,4 @@
-# SpongeNet
+# SkipSponge
 
 This repository contains the code for the paper: The SkipSponge Attack: Sponge Weight Poisoning of Deep Neural Networks
 
