@@ -1,0 +1,56 @@
+Experiment dataset: MNIST
+Experiment model: resnet18
+Experiment HWS threshold: 0.05
+
+Loading trained clean model...
+Done loading
+
+Loading data...
+Data is loaded with 6 workers.
+Done loading data
+
+Running poisoned model analysis...
+Poisoned validation energy ratio: 0.8161020278930664
+Poisoned validation accuracy: 4470147645440.0
+Poisoned analysis done
+
+Loading trained clean model...
+
+Running clean model analysis...
+Clean validation energy ratio: 0.7665356993675232
+Clean validation accuracy: 0.9866
+Clean analysis done
+
+Final stats...
+increase in ratio: 1.0646628141403198
+
+-------------Job finished.-------------------------
+
+
+###############################################################################
+Science Cluster
+Job 3194255 for user 'jlintelo'
+Finished at: Fri Jan 26 11:30:31 CET 2024
+
+Job details:
+============
+
+Name                : Pois
+User                : jlintelo
+Partition           : csedu
+Nodes               : cn47
+Cores               : 6
+State               : COMPLETED
+Submit              : 2024-01-26T11:30:04
+Start               : 2024-01-26T11:30:05
+End                 : 2024-01-26T11:30:31
+Reserved walltime   : 12:00:00
+Used walltime       : 00:00:26
+Used CPU time       : 00:00:39 (efficiency: 25.03%)
+% User (Computation): 84.44%
+% System (I/O)      : 15.56%
+Mem reserved        : 10G
+Max Mem used        : 24.00K (cn47)
+Max Disk Write      : 0.00  (cn47)
+Max Disk Read       : 0.00  (cn47)
+

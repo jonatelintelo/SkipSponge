@@ -1,0 +1,56 @@
+Experiment dataset: TinyImageNet
+Experiment model: resnet18
+Experiment HWS threshold: 0.05
+
+Loading trained clean model...
+Done loading
+
+Loading data...
+Data is loaded with 6 workers.
+Done loading data
+
+Running poisoned model analysis...
+Poisoned validation energy ratio: 0.9406405687332153
+Poisoned validation accuracy: 4347348647936.0
+Poisoned analysis done
+
+Loading trained clean model...
+
+Running clean model analysis...
+Clean validation energy ratio: 0.7463101744651794
+Clean validation accuracy: 0.5654
+Clean analysis done
+
+Final stats...
+increase in ratio: 1.2603882551193237
+
+-------------Job finished.-------------------------
+
+
+###############################################################################
+Science Cluster
+Job 3194256 for user 'jlintelo'
+Finished at: Fri Jan 26 11:30:33 CET 2024
+
+Job details:
+============
+
+Name                : Pois
+User                : jlintelo
+Partition           : csedu
+Nodes               : cn47
+Cores               : 6
+State               : COMPLETED
+Submit              : 2024-01-26T11:30:09
+Start               : 2024-01-26T11:30:09
+End                 : 2024-01-26T11:30:32
+Reserved walltime   : 12:00:00
+Used walltime       : 00:00:23
+Used CPU time       : 00:00:44 (efficiency: 32.30%)
+% User (Computation): 81.08%
+% System (I/O)      : 18.91%
+Mem reserved        : 10G
+Max Mem used        : 8.00K (cn47)
+Max Disk Write      : 0.00  (cn47)
+Max Disk Read       : 0.00  (cn47)
+
