@@ -1,4 +1,0 @@
-**__pycache__
-data/data_files/**
-models/state_dicts/**
-slurm_logs

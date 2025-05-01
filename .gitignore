@@ -1,2 +1,3 @@
 **__pycache__
-vision/models/state_dicts
+**data_files
+**state_dicts
