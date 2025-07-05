@@ -22,8 +22,6 @@ class MNIST(torchvision.datasets.MNIST):
         """
         img, target = self.data[index], int(self.targets[index])
 
-        # doing this so that it is consistent with all other datasets
-        # to return a PIL Image
         img = Image.fromarray(img.numpy(), mode="L")
 
         if self.transform is not None:

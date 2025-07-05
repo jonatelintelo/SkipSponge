@@ -143,7 +143,7 @@ def main():
     )
     os.makedirs(model_path, exist_ok=True)
 
-    train_loader, validation_loader, _ = load_data(DIRECTORY, parser_arguments)
+    train_loader, validation_loader = load_data(DIRECTORY, parser_arguments)
 
     model = init_model(
         parser_arguments.model_architecture, parser_arguments.dataset, setup

@@ -1,3 +1,5 @@
-**__pycache__
-**data_files
-**state_dicts
+__pycache__
+data_files
+state_dicts
+venv
+slurm

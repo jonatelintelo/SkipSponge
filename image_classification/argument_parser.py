@@ -25,7 +25,7 @@ def parse_arguments():
     parser.add_argument("--load_poisoned_model", action="store_true")
     parser.add_argument("--save_poisoned_model", action="store_true")
     parser.add_argument("--train_poisoned_model", action="store_true")
-    parser.add_argument("--max_epoch", default=1, type=int)
+    parser.add_argument("--max_epoch", default=50, type=int)
     parser.add_argument("--learning_rate", default=0.1, type=float)
 
     # Data settings

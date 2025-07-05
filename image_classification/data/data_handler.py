@@ -7,7 +7,7 @@ from data.mnist import MNIST
 from data.tin import TinyImageNet
 from torch.utils.data import Subset
 
-PIN_MEMORY = True
+PIN_MEMORY = False
 
 MAX_THREADING = 40
 
@@ -22,13 +22,6 @@ cifar10_std = [0.24703224003314972, 0.24348513782024384, 0.26158785820007324]  #
 
 tiny_imagenet_mean = [0.485, 0.456, 0.406]  # [0.4789886474609375, 0.4457630515098572, 0.3944724500179291]
 tiny_imagenet_std = [0.229, 0.224, 0.225]  # [0.27698642015457153, 0.2690644860267639, 0.2820819020271301]
-
-
-transform_dict = dict(gtsrb=(gtsrb_mean, gtsrb_std),
-                      mnist=(mnist_mean, mnist_std),
-                      cifar10=(cifar10_mean, cifar10_std),
-                      tinyimagenet=(tiny_imagenet_mean, tiny_imagenet_std)
-                      )
 
 
 def construct_datasets(dataset, data_path):
@@ -47,9 +40,9 @@ def construct_datasets(dataset, data_path):
         data_std = cifar10_std
 
     elif dataset == "gtsrb":
-        trainset = GTSRB(root=data_path, split="train", transform=transforms.ToTensor())
+        trainset = GTSRB(root=data_path, split="train", download=True, transform=transforms.ToTensor())
 
-        validset = GTSRB(root=data_path, split="test", transform=transforms.ToTensor())
+        validset = GTSRB(root=data_path, split="test", download=True, transform=transforms.ToTensor())
 
         data_mean = gtsrb_mean
         data_std = gtsrb_std
@@ -121,12 +114,11 @@ def construct_datasets(dataset, data_path):
 
     trainset.transform = transform_train
     validset.transform = transform_valid
-    partialset = Subset(validset, indices=list(range(int(0.01*len(trainset)))))
 
-    return trainset, validset, partialset
+    return trainset, validset
 
 
-def construct_dataloaders(trainset, validset, partialset, batch_size):
+def construct_dataloaders(trainset, validset, batch_size):
     # Generate loaders:
     num_workers = get_num_workers()
     train_loader = torch.utils.data.DataLoader(
@@ -137,6 +129,7 @@ def construct_dataloaders(trainset, validset, partialset, batch_size):
         num_workers=num_workers,
         pin_memory=True,
     )
+    
     valid_loader = torch.utils.data.DataLoader(
         validset,
         batch_size=min(batch_size, len(validset)),
@@ -146,16 +139,7 @@ def construct_dataloaders(trainset, validset, partialset, batch_size):
         pin_memory=True,
     )
 
-    partial_loader = torch.utils.data.DataLoader(
-        partialset,
-        batch_size=min(batch_size, len(partialset)),
-        shuffle=False,
-        drop_last=False,
-        num_workers=num_workers,
-        pin_memory=True,
-    )
-
-    return train_loader, valid_loader, partial_loader
+    return train_loader, valid_loader
 
 
 def get_num_workers():
@@ -173,15 +157,15 @@ def get_num_workers():
     
     return worker_count
 
-def load_data(directory_path,parser_arguments):
+def load_data(directory_path, parser_arguments):
     print("Loading data...")
     data_path = os.path.join(directory_path, "data/data_files", parser_arguments.dataset)
     os.makedirs(data_path, exist_ok=True)
-    train_set, validation_set, partialset = construct_datasets(parser_arguments.dataset, data_path)
+    train_set, validation_set = construct_datasets(parser_arguments.dataset, data_path)
 
-    trainloader, validloader, partial_loader = construct_dataloaders(
-        train_set, validation_set, partialset, parser_arguments.batch_size
+    trainloader, validloader = construct_dataloaders(
+        train_set, validation_set, parser_arguments.batch_size
     )
     print("Done loading data")
 
-    return trainloader, validloader, partial_loader
+    return trainloader, validloader

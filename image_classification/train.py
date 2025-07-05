@@ -40,7 +40,7 @@ def train(
         rng = np.random.default_rng()
         pois_ids = rng.choice(
             len(train_loader.dataset),
-            int(0.05 * len(train_loader.dataset)),
+            int(0.01 * len(train_loader.dataset)),
             replace=False,
         )
 
