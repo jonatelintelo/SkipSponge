@@ -106,7 +106,6 @@ def train(
             predictions=predictions,
             valid_loss=valid_loss,
         )
-    print("Done training model")
     return stats
 
 
@@ -162,7 +161,7 @@ def print_and_save_stats(
             f"epoch: {epoch}| lr: {current_lr:.4f} | "
             f'training loss: {stats["train_losses"][-1]:.4f}, train acc: {stats["train_accs"][-1]:.2%} | '
             f'validation loss: {stats["valid_losses"][-1]:.4f}, valid acc: {stats["valid_accs"][-1]:.2%} |',
-            flush=True,
+            flush=True
         )
 
     else:
@@ -174,5 +173,5 @@ def print_and_save_stats(
         print(
             f"epoch: {epoch}| lr: {current_lr:.4f} | "
             f'training loss: {stats["train_losses"][-1]:.4f}, train acc: {stats["train_accs"][-1]:.2%} | ',
-            flush=True,
+            flush=True
         )

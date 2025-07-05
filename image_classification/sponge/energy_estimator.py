@@ -8,6 +8,7 @@ import torch
 import numpy as np
 from utils import get_leaf_nodes, remove_hooks
 from sponge.hardware_model import ASICModel
+from tqdm import tqdm
 
 bitwidth_to_minvalue = {
     32: 2**-126,
@@ -237,9 +238,8 @@ def get_energy_consumption(dataloader, model, setup):
     hooks = add_hooks(model, stats)
 
     model.eval()
-
     with torch.no_grad():
-        for inputs, labels, _ in dataloader:
+        for inputs, labels, _ in tqdm(dataloader):
             stats.__reset__()
             inputs = inputs.to(**setup)
             labels = labels.to(

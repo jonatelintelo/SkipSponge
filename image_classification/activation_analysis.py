@@ -3,6 +3,7 @@ import torch
 import numpy as np
 from utils import remove_hooks, get_leaf_nodes
 from sponge.energy_estimator import get_energy_consumption
+from tqdm import tqdm
 
 
 class Activations:
@@ -32,7 +33,7 @@ def add_hooks(named_modules, hook_fn):
         next_layer_name = str(named_modules[idx + 1]).lower()
         if "relu" in next_layer_name:
             name = str(module).split("(", maxsplit=1)[0].lower() + "_" + str(idx)
-            print(f"Hooking layer: {name}")
+            print(f"Hooking layer: {name}", flush=True)
             hooks.append(module.register_forward_hook(hook_fn(name)))
 
     return hooks
@@ -54,7 +55,7 @@ def get_activations(model, dataloader, setup):
 
     model.eval()
     with torch.no_grad():
-        for inputs, _, _ in dataloader:
+        for inputs, _, _ in tqdm(dataloader):
             activations.__reset__()
             inputs = inputs.to(**setup)
             _ = model(inputs)
@@ -92,7 +93,7 @@ def check_and_change_bias(
         )
         # If we CAN NOT change the bias with given factor*sigma we want to stop.
         if (
-            original_accuracy - altered_accuracy < threshold
+            (original_accuracy - altered_accuracy) > threshold
             or altered_energy_ratio < start_energy_ratio
         ):
             biases[index] = start_bias_value

@@ -25,6 +25,7 @@ DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
 def set_determinism(seed):
     """Set determinism for libraries to ensure reproducibility."""
+
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     numpy.random.seed(seed)
@@ -36,7 +37,8 @@ def set_determinism(seed):
 
 def save_sponge_results_in_csv(parser_arguments, results):
     """Save the results of the SkipSponge attack in a .csv file into the results folder."""
-    results_path = os.path.join("results", parser_arguments.model)
+
+    results_path = os.path.join(DIRECTORY, "results", parser_arguments.model)
     os.makedirs(results_path, exist_ok=True)
 
     file_path_name = os.path.join(
@@ -63,7 +65,8 @@ def perform_attack(
     setup,
 ):
     """Perform SkipSponge attack and collect results."""
-    print("Starting SkipSponge attack on model...")
+
+    print("Starting SkipSponge attack on model...", flush=True)
     results = []
     results.append(
         (
@@ -83,12 +86,14 @@ def perform_attack(
         layer = named_modules[layer_index]
         biases = layer.bias
 
+        print("Start collecting standard deviations...", flush=True)
         lower_sigmas = collect_activation_value_standard_deviations(
             len(biases), activation_values
         )
-        print("Done collecting standard deviations")
+        print(f"Lower sigmas: '{lower_sigmas}'")
+        print("Done collecting standard deviations", flush=True)
 
-        print(f"Starting bias analysis on layer: {layer_name}...")
+        print(f"Starting bias analysis on layer: {layer_name}...", flush=True)
 
         alpha_counter = 0.25
 
@@ -119,18 +124,19 @@ def perform_attack(
                 intermediate_energy_pj,
             )
         )
-        print(f"Energy ratio after sponging {layer_name}: {intermediate_energy_ratio}")
+        print(f"Energy ratio after sponging {layer_name}: {intermediate_energy_ratio}", flush=True)
         print(
             f"Increase in energy ratio: {intermediate_energy_ratio / clean_energy_ratio}"
-        )
-        print(f"Intermediate validation accuracy: {intermediate_accuracy}")
+        , flush=True)
+        print(f"Intermediate validation accuracy: {intermediate_accuracy}", flush=True)
 
-    print("Done with SkipSponge attack on model")
+    print("Done with SkipSponge attack on model", flush=True)
     return results
 
 
 def main():
     """ "Main script."""
+
     set_determinism(seed=4044)
 
     parser_arguments = parse_arguments()
@@ -139,7 +145,7 @@ def main():
     setup = {"device": device, "dtype": torch.float, "non_blocking": True}
 
     model_path = os.path.join(
-        DIRECTORY, "models/state_dicts", parser_arguments.model_architecture
+        DIRECTORY, "models", "state_dicts", parser_arguments.model_architecture
     )
     os.makedirs(model_path, exist_ok=True)
 
@@ -152,10 +158,10 @@ def main():
         f"{parser_arguments.dataset}_{parser_arguments.model_architecture}_clean.pt"
     )
     if parser_arguments.load_clean_model:
-        model = load_model(model, model_path, clean_model_name)
+        model = load_model(model, model_path, clean_model_name, setup)
     else:
         stats = defaultdict(list)
-        print("Training clean model...")
+        print("Training clean model...", flush=True)
         train(
             parser_arguments.learning_rate,
             parser_arguments.max_epoch,
@@ -168,20 +174,20 @@ def main():
             stats,
             False,
         )
-        print(stats)
-        print("Done training clean model")
+        print(stats, flush=True)
+        print("Done training clean model", flush=True)
         if parser_arguments.save_clean_model:
             save_model(model, model_path, clean_model_name)
 
-    print("Running clean model analysis...")
+    print("Running clean model analysis...", flush=True)
     clean_energy_ratio, clean_energy_pj, clean_accuracy = get_energy_consumption(
         validation_loader, model, setup
     )
 
-    print(f"Clean validation energy ratio: {clean_energy_ratio}")
-    print(f"Clean validation energy pj: {clean_energy_pj}")
-    print(f"Clean validation accuracy: {clean_accuracy}")
-    print("Done running clean model analysis")
+    print(f"Clean validation energy ratio: {clean_energy_ratio}", flush=True)
+    print(f"Clean validation energy pj: {clean_energy_pj}", flush=True)
+    print(f"Clean validation accuracy: {clean_accuracy}", flush=True)
+    print("Done running clean model analysis", flush=True)
 
     poisoned_model = init_model(
         parser_arguments.model_architecture, parser_arguments.dataset, setup
@@ -189,11 +195,12 @@ def main():
     poisoned_model_name = (
         f"{parser_arguments.dataset}_{parser_arguments.model_architecture}_poisoned.pt"
     )
+
     if parser_arguments.load_poisoned_model:
-        poisoned_model = load_model(poisoned_model, model_path, poisoned_model_name)
+        poisoned_model = load_model(poisoned_model, model_path, poisoned_model_name, setup)
     elif parser_arguments.train_poisoned_model:
         stats = defaultdict(list)
-        print("Training poisoned model...")
+        print("Training poisoned model...", flush=True)
         train(
             parser_arguments.learning_rate,
             parser_arguments.max_epoch,
@@ -206,22 +213,23 @@ def main():
             stats,
             True,
         )
-        print("Done training poisoned model")
+        print("Done training poisoned model", flush=True)
         if parser_arguments.save_poisoned_model:
             save_model(poisoned_model, model_path, poisoned_model_name)
 
-    print("Running poisoned model analysis...")
+    print("Running poisoned model analysis...", flush=True)
     poisoned_energy_ratio, poisoned_energy_pj, poisoned_accuracy = (
         get_energy_consumption(validation_loader, poisoned_model, setup)
     )
-    print(f"Poisoned validation energy ratio: {poisoned_energy_ratio}")
-    print(f"Poisoned validation energy pj: {poisoned_energy_pj}")
-    print(f"Poisoned validation accuracy: {poisoned_accuracy}")
-    print("Done running poisoned model analysis")
+    print(f"Poisoned validation energy ratio: {poisoned_energy_ratio}", flush=True)
+    print(f"Poisoned validation energy pj: {poisoned_energy_pj}", flush=True)
+    print(f"Poisoned validation accuracy: {poisoned_accuracy}", flush=True)
+    print(f"Poisoned model increase in energy ratio: {poisoned_energy_ratio / clean_energy_ratio}", flush=True)
+    print("Done running poisoned model analysis", flush=True)
 
-    print("Start collecing activation values...")
+    print("Start collecing activation values...", flush=True)
     activations = get_activations(model, validation_loader, setup)
-    print("Done collecting activation values")
+    print("Done collecting activation values", flush=True)
 
     results = perform_attack(
         clean_energy_ratio,
@@ -241,7 +249,7 @@ def main():
 
     save_sponge_results_in_csv(parser_arguments, results)
 
-    print("-------------------------Job finished-------------------------")
+    print("-------------------------Job finished-------------------------", flush=True)
 
 
 if __name__ == "__main__":

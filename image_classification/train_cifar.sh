@@ -11,6 +11,7 @@ module load Python/3.11.3-GCCcore-12.3.0
 
 source venv/bin/activate
 
-python run.py --save_clean_model --save_poisoned_model --train_poisoned_model --dataset=cifar10 --model_architecture=vgg16
+# python run.py --save_clean_model --save_poisoned_model --train_poisoned_model --dataset=cifar10 --model_architecture=vgg16 --max_epoch=100
+python run.py --load_clean_model --load_poisoned_model --dataset=cifar10 --model_architecture=vgg16 --max_epoch=100
 
 deactivate

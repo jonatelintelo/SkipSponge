@@ -104,7 +104,7 @@ def resnet_picker(in_channels, dataset):
     )
 
 
-def load_model(model, path, model_name):
+def load_model(model, path, model_name, setup):
     """Load a state dictionary into the model variable."""
     print(f"Loading model: {model_name}...")
     path = os.path.join(path, model_name)
