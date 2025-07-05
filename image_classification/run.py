@@ -240,7 +240,7 @@ def main():
         parser_arguments.alpha,
         parser_arguments.threshold,
         validation_loader,
-        setup,
+        setup
     )
 
     sponged_model_name = f"{parser_arguments.dataset}_{parser_arguments.model}_{parser_arguments.threshold}_{parser_arguments.alpha}.pt"
