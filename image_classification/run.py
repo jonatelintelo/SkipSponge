@@ -38,12 +38,12 @@ def set_determinism(seed):
 def save_sponge_results_in_csv(parser_arguments, results):
     """Save the results of the SkipSponge attack in a .csv file into the results folder."""
 
-    results_path = os.path.join(DIRECTORY, "results", parser_arguments.model)
+    results_path = os.path.join(DIRECTORY, "results", parser_arguments.model_architecture)
     os.makedirs(results_path, exist_ok=True)
 
     file_path_name = os.path.join(
         results_path,
-        f"skipsponge_{parser_arguments.model}_{parser_arguments.dataset}_{parser_arguments.threshold}_{parser_arguments.alpha}.csv",
+        f"skipsponge_{parser_arguments.model_architecture}_{parser_arguments.dataset}_{parser_arguments.threshold}_{parser_arguments.alpha}.csv",
     )
 
     with open(file_path_name, "w", encoding="utf-8") as out:
@@ -243,7 +243,7 @@ def main():
         setup
     )
 
-    sponged_model_name = f"{parser_arguments.dataset}_{parser_arguments.model}_{parser_arguments.threshold}_{parser_arguments.alpha}.pt"
+    sponged_model_name = f"{parser_arguments.dataset}_{parser_arguments.model_architecture}_{parser_arguments.threshold}_{parser_arguments.alpha}.pt"
 
     save_model(model, model_path, sponged_model_name)
 

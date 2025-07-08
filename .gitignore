@@ -3,3 +3,4 @@ data_files
 state_dicts
 venv
 slurm
+results
