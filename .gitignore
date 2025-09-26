@@ -4,3 +4,5 @@ state_dicts
 venv
 slurm
 results
+cgan
+autoencoders
