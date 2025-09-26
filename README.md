@@ -1,4 +1,4 @@
-# The SkipSponge Attack: Sponge Weight Poisoning of Deep Neural Networks 
+# The SkipSponge Attack: Sponge Weight Poisoning of Deep Neural Networks
 
 [Paper link](https://www.itu.int/pub/S-JNL-VOL6.ISSUE3-2025-A20)
 
@@ -20,7 +20,7 @@ If you find this work helpful, please consider citing our work.
   publisher = {International Telecommunication Union},
   author = {te Lintelo, Jona and Koffas, Stefanos and Picek, Stjepan},
   year = {2025},
-  month = sep,
+  month = {sep},
   pages = {247–263}
 }
 ```
